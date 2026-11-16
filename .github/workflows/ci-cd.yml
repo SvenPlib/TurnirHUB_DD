@@ -88,3 +88,45 @@ jobs:
           name: backend-package
           path: backend-package.tar.gz
           if-no-files-found: error
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/turnirHub/package-lock.json
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm ci
+      - name: Run backend tests with coverage
+        working-directory: ./backend
+        run: node --test --experimental-test-coverage > coverage-report.txt
+      - name: Upload backend coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: backend/coverage-report.txt
+          if-no-files-found: error
+      - name: Install frontend dependencies
+        working-directory: ./frontend/turnirHub
+        run: npm ci
+      - name: Run frontend tests with coverage
+        working-directory: ./frontend/turnirHub
+        run: npm run test:coverage
+      - name: Upload frontend coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: frontend/turnirHub/coverage/
+          if-no-files-found: error
