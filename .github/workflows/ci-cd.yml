@@ -39,3 +39,52 @@ jobs:
       - name: Lint frontend
         working-directory: ./frontend/turnirHub
         run: npm run lint
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/turnirHub/package-lock.json
+      - name: Install frontend dependencies
+        working-directory: ./frontend/turnirHub
+        run: npm ci
+      - name: Build frontend
+        working-directory: ./frontend/turnirHub
+        run: npm run build
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/turnirHub/dist/
+          if-no-files-found: error
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm ci
+      - name: Generate Prisma Client
+        working-directory: ./backend
+        run: npx prisma generate
+      - name: Check backend syntax
+        working-directory: ./backend
+        run: node --check server.js
+      - name: Package backend
+        run: |
+          tar -czf backend-package.tar.gz \
+            -C backend \
+            server.js src prisma scripts \
+            package.json package-lock.json node_modules
+      - name: Upload backend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-package
+          path: backend-package.tar.gz
+          if-no-files-found: error
