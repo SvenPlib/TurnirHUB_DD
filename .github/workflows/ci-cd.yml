@@ -235,8 +235,7 @@ jobs:
           path: ./artifacts/vercel
       - name: Restore Vercel artifact
         run: |
-          mkdir -p frontend/turnirHub
           tar -xzf artifacts/vercel/vercel-output.tar.gz \
-            -C frontend/turnirHub
+            -C .
       - name: Deploy frontend to Vercel
         run: npx --yes vercel@66.6.0 deploy --prebuilt --prod --yes --token="$VERCEL_TOKEN"
