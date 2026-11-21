@@ -239,5 +239,4 @@ jobs:
           tar -xzf artifacts/vercel/vercel-output.tar.gz \
             -C frontend/turnirHub
       - name: Deploy frontend to Vercel
-        working-directory: ./frontend/turnirHub
         run: npx --yes vercel@66.6.0 deploy --prebuilt --prod --yes --token="$VERCEL_TOKEN"
