@@ -1,12 +1,12 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const COOKIE_NAME = 'token';
+const COOKIE_NAME = "token";
 // Kratka veljavnost žetona (glej ADR-0005); privzeto 1 ura.
 const TOKEN_TTL_SECONDS = Number(process.env.JWT_EXPIRES_IN_SECONDS) || 60 * 60;
 
 function getSecret() {
   if (!process.env.JWT_SECRET) {
-    throw new Error('JWT_SECRET ni nastavljen');
+    throw new Error("JWT_SECRET ni nastavljen");
   }
   return process.env.JWT_SECRET;
 }
@@ -22,11 +22,13 @@ function verifyToken(token) {
   return jwt.verify(token, getSecret());
 }
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const cookieOptions = {
   httpOnly: true,
-  sameSite: 'lax',
-  secure: process.env.NODE_ENV === 'production',
-  path: '/',
+  sameSite: isProduction ? "none" : "lax",
+  secure: isProduction,
+  path: "/",
 };
 
 module.exports = {
