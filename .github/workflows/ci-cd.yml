@@ -22,8 +22,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22"
+          cache: "npm"
           cache-dependency-path: |
             backend/package-lock.json
             frontend/turnirHub/package-lock.json
@@ -50,8 +50,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22"
+          cache: "npm"
           cache-dependency-path: |
             backend/package-lock.json
             frontend/turnirHub/package-lock.json
@@ -99,8 +99,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22"
+          cache: "npm"
           cache-dependency-path: |
             backend/package-lock.json
             frontend/turnirHub/package-lock.json
@@ -130,3 +130,61 @@ jobs:
           name: frontend-coverage
           path: frontend/turnirHub/coverage/
           if-no-files-found: error
+
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    needs: [lint, build, test]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: production
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Download backend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-package
+          path: ./artifacts/backend
+      - name: Prepare backend Docker context
+        run: |
+          mkdir -p deploy-context
+          tar -xzf artifacts/backend/backend-package.tar.gz \
+            -C deploy-context
+          cp backend/Dockerfile.deploy deploy-context/Dockerfile
+      - name: Set Docker image name
+        id: image
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}-backend"
+          echo "name=$IMAGE" >> "$GITHUB_OUTPUT"
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Package and push backend image
+        run: |
+          IMAGE="${{ steps.image.outputs.name }}"
+          docker build --platform linux/amd64 \
+            -t "$IMAGE:latest" \
+            -t "$IMAGE:$GITHUB_SHA" \
+            ./deploy-context
+          docker push "$IMAGE:latest"
+          docker push "$IMAGE:$GITHUB_SHA"
+      - name: Trigger Render deployment
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          IMAGE_NAME: ${{ steps.image.outputs.name }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "::notice::Render deploy hook is not configured yet."
+            exit 0
+          fi
+          curl --fail-with-body --show-error --silent \
+            --get \
+            --data-urlencode "imgURL=$IMAGE_NAME:$GITHUB_SHA" \
+            "$RENDER_DEPLOY_HOOK_URL"
