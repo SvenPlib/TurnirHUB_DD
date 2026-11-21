@@ -182,7 +182,7 @@ jobs:
         run: |
           if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
             echo "::notice::Render deploy hook is not configured yet."
-            exit 0
+            exit 1
           fi
           curl --fail-with-body --show-error --silent \
             --get \
