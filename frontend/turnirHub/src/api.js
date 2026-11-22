@@ -1,7 +1,5 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-const namernaNapakaLint = 123;
-
 // Pomožna funkcija za klice API-ja. Piškotek z JWT se pošilja samodejno (credentials: 'include').
 export async function api(path, { method = "GET", body } = {}) {
   const response = await fetch(`${API_URL}${path}`, {
