@@ -1,5 +1,7 @@
 # TurnirHub
 
+[![CI/CD](https://github.com/SvenPlib/TurnirHUB_DD/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/SvenPlib/TurnirHUB_DD/actions/workflows/ci-cd.yml)
+
 **TurnirHub** je spletna platforma za organizacijo amaterskih športnih turnirjev (košarka, nogomet, odbojka, mali nogomet, šah). Na enem mestu omogoča objavo turnirja, prijavo in potrditev ekip, samodejno generiranje razporeda, vnos in potrjevanje rezultatov ter samodejni izračun lestvice.
 
 Organizatorji tako ne potrebujejo več skupin na družbenih omrežjih, sporočil in Excelovih tabel, igralci in ekipe pa imajo razpored, rezultate in lestvico na enem mestu.
@@ -16,13 +18,13 @@ Organizatorji tako ne potrebujejo več skupin na družbenih omrežjih, sporočil
 
 ## Uporabljene tehnologije
 
-| Področje | Tehnologija |
-|---|---|
-| Frontend | React, Vite, Tailwind CSS |
-| Backend | Node.js, Express (REST API) |
-| Podatkovna baza | PostgreSQL, Prisma ORM |
-| Avtentikacija | JWT, bcrypt |
-| Lokalni razvoj | Docker Compose |
+| Področje        | Tehnologija                 |
+| --------------- | --------------------------- |
+| Frontend        | React, Vite, Tailwind CSS   |
+| Backend         | Node.js, Express (REST API) |
+| Podatkovna baza | PostgreSQL, Prisma ORM      |
+| Avtentikacija   | JWT, bcrypt                 |
+| Lokalni razvoj  | Docker Compose              |
 
 ## Lokalni zagon
 
@@ -48,11 +50,11 @@ Za zagon je dovolj [Docker](https://www.docker.com/) (Docker Desktop z ukazom `d
 
 3. Odpri aplikacijo:
 
-   | Storitev | Naslov |
-   |---|---|
-   | Spletni vmesnik | http://localhost:5173 |
-   | API | http://localhost:3000 (preverjanje: `/api/health`) |
-   | PostgreSQL | localhost:5432 |
+   | Storitev        | Naslov                                             |
+   | --------------- | -------------------------------------------------- |
+   | Spletni vmesnik | http://localhost:5173                              |
+   | API             | http://localhost:3000 (preverjanje: `/api/health`) |
+   | PostgreSQL      | localhost:5432                                     |
 
 ### Demo podatki
 
@@ -66,27 +68,27 @@ Skripta ustvari uporabnike, ekipe in šest turnirjev v različnih stanjih. Če d
 
 Geslo za vse demo račune je `geslo1234`.
 
-| Račun | Vloga | Opomba |
-|---|---|---|
-| `organizator@demo.si` | organizator | upravlja vse demo turnirje |
-| `admin@demo.si` | administrator | |
-| `ana@demo.si` | igralec | kapetan ekipe Orli |
-| `dani@demo.si` | igralec | kapetan ekipe Sokoli |
-| `gaja@demo.si` | igralec | kapetan ekipe Volkovi |
-| `jure@demo.si` | igralec | kapetan ekipe Medvedi |
-| `maja@demo.si` | igralec | kapetan ekipe Rakete |
-| `oto@demo.si` | igralec | kapetan ekipe Zmaji |
+| Račun                 | Vloga         | Opomba                     |
+| --------------------- | ------------- | -------------------------- |
+| `organizator@demo.si` | organizator   | upravlja vse demo turnirje |
+| `admin@demo.si`       | administrator |                            |
+| `ana@demo.si`         | igralec       | kapetan ekipe Orli         |
+| `dani@demo.si`        | igralec       | kapetan ekipe Sokoli       |
+| `gaja@demo.si`        | igralec       | kapetan ekipe Volkovi      |
+| `jure@demo.si`        | igralec       | kapetan ekipe Medvedi      |
+| `maja@demo.si`        | igralec       | kapetan ekipe Rakete       |
+| `oto@demo.si`         | igralec       | kapetan ekipe Zmaji        |
 
 Ostali igralci so člani ekip (`bor@`, `ciril@`, `eva@`, `franc@`, `hana@`, `ivan@`, `klara@`, `luka@`, `nik@`, `pia@` z domeno `@demo.si`).
 
-| Turnir | Format | Stanje | Kaj lahko preizkusiš |
-|---|---|---|---|
-| Pomladna liga | liga | zaključen | končna lestvica, vse tekme potrjene |
-| Poletna liga | liga | v teku | tekme v vseh stanjih: potrjena, čaka na potrditev, sporna, še neodigrana |
-| Izločilni pokal | izločanje | v teku | prosti prehodi, napredovanje zmagovalca, vnos rezultatov |
-| Jesenska liga | liga | prijave zaprte | generiranje razporeda (organizator) |
-| Zimski turnir | izločanje | prijave odprte | prijava ekipe (npr. Rakete ali Zmaji), potrditev prijav |
-| Spomladanski turnir | liga | osnutek | objava turnirja |
+| Turnir              | Format    | Stanje         | Kaj lahko preizkusiš                                                     |
+| ------------------- | --------- | -------------- | ------------------------------------------------------------------------ |
+| Pomladna liga       | liga      | zaključen      | končna lestvica, vse tekme potrjene                                      |
+| Poletna liga        | liga      | v teku         | tekme v vseh stanjih: potrjena, čaka na potrditev, sporna, še neodigrana |
+| Izločilni pokal     | izločanje | v teku         | prosti prehodi, napredovanje zmagovalca, vnos rezultatov                 |
+| Jesenska liga       | liga      | prijave zaprte | generiranje razporeda (organizator)                                      |
+| Zimski turnir       | izločanje | prijave odprte | prijava ekipe (npr. Rakete ali Zmaji), potrditev prijav                  |
+| Spomladanski turnir | liga      | osnutek        | objava turnirja                                                          |
 
 ### Vloge uporabnikov
 
@@ -100,14 +102,53 @@ Možne vloge so `PLAYER`, `ORGANIZER` in `ADMIN`. Po spremembi vloge se uporabni
 
 ### Uporabni ukazi
 
-| Namen | Ukaz |
-|---|---|
-| Ustavi storitve (podatki ostanejo) | `docker compose stop` |
-| Ugasni in odstrani kontejnerje (podatki ostanejo) | `docker compose down` |
-| Ugasni in **izbriši podatke v bazi** | `docker compose down -v` |
+| Namen                                                  | Ukaz                                             |
+| ------------------------------------------------------ | ------------------------------------------------ |
+| Ustavi storitve (podatki ostanejo)                     | `docker compose stop`                            |
+| Ugasni in odstrani kontejnerje (podatki ostanejo)      | `docker compose down`                            |
+| Ugasni in **izbriši podatke v bazi**                   | `docker compose down -v`                         |
 | Ponovni zagon po spremembi odvisnosti (`package.json`) | `docker compose up --build --renew-anon-volumes` |
-| Izpis dnevnika API-ja | `docker compose logs -f api` |
-| Enotni testi (backend) | `docker compose exec api npm test` |
+| Izpis dnevnika API-ja                                  | `docker compose logs -f api`                     |
+| Enotni testi (backend)                                 | `docker compose exec api npm test`               |
+
+## CI/CD – Samodejno preverjanje in namestitev
+
+Projekt uporablja GitHub Actions za samodejno preverjanje kakovosti kode, gradnjo, testiranje in produkcijsko namestitev aplikacije. Cevovod je definiran v datoteki `.github/workflows/ci-cd.yml` in se sproži ob vsakem Pull Requestu v vejo `main` ter ob vsakem pushu v vejo `main`.
+
+### Produkcijska aplikacija
+
+Aplikacija je javno dostopna na naslednjih naslovih:
+
+- **Spletna aplikacija (Vercel):** https://turnirhub-frontend.vercel.app
+- **Backend API (Render):** https://turnirhub-backend.onrender.com
+
+Podatkovna baza PostgreSQL je nameščena na storitvi Render in je zalednemu delu aplikacije dostopna prek okoljske spremenljivke `DATABASE_URL`.
+
+### Faze CI/CD cevovoda
+
+Cevovod sestavljajo naslednje faze:
+
+1. **Lint:** Preverjanje kakovosti kode frontenda in backenda z orodjem ESLint. Če preverjanje zazna napake, se job zaključi neuspešno.
+
+2. **Build:** Namestitev odvisnosti, gradnja frontenda in priprava backenda. Za hitrejše izvajanje se uporablja npm predpomnjenje (caching). Rezultati gradnje se shranijo kot GitHub Actions artefakti.
+
+3. **Test:** Izvajanje avtomatiziranih testov za frontend in backend. Skupno se izvede 33 testov (22 backend in 11 frontend). Poročila o pokritosti kode se shranijo kot artefakti. Ob neuspešnem testu job pade.
+
+4. **Build Vercel:** Priprava produkcijskega frontend artefakta za namestitev na Vercel. Faza se izvede samo ob pushu v vejo `main`, če so predhodna preverjanja uspešna.
+
+5. **Deploy:** Samodejna namestitev aplikacije v produkcijsko okolje. Backend se namesti na Render, frontend pa na Vercel. Pri namestitvi se uporabijo predhodno pripravljeni artefakti, zato se aplikacija v deploy jobu ne gradi ponovno.
+
+### Zaščita glavne veje
+
+Veja `main` je zaščitena z GitHub Ruleset. Spremembe se vanjo vključujejo prek Pull Requestov, pri katerih morajo biti uspešno zaključena preverjanja `lint`, `build` in `test`.
+
+Delovanje zaščite je bilo preverjeno z namensko napako ESLint. Neuspešno preverjanje je preprečilo združitev Pull Requesta, po odpravi napake in uspešnem ponovnem preverjanju pa je bila združitev ponovno omogočena.
+
+### Produkcijsko okolje in dostopni podatki
+
+Za namestitev se uporablja GitHub Environment `production`. Dostopni žetoni in drugi občutljivi podatki so shranjeni kot GitHub Environment Secrets in niso vključeni v izvorno kodo.
+
+Frontend uporablja okoljsko spremenljivko `VITE_API_URL` za povezavo z nameščenim backendom.
 
 ## Dokumentacija
 
